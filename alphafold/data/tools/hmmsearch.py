@@ -30,12 +30,14 @@ class Hmmsearch(object):
                *,
                binary_path: str,
                database_path: str,
+               n_cpu: int = 12,
                flags: Optional[Sequence[str]] = None):
     """Initializes the Python hmmsearch wrapper.
 
     Args:
       binary_path: The path to the hmmsearch executable.
       database_path: The path to the hmmsearch database (FASTA format).
+      n_cpu: The number of CPUs to give hmmsearch.
       flags: List of flags to be used by hmmsearch.
 
     Raises:
@@ -43,6 +45,7 @@ class Hmmsearch(object):
     """
     self.binary_path = binary_path
     self.database_path = database_path
+    self.n_cpu = n_cpu
     self.flags = flags
 
     if not os.path.exists(self.database_path):
@@ -60,7 +63,7 @@ class Hmmsearch(object):
       cmd = [
           self.binary_path,
           '--noali',  # Don't include the alignment in stdout.
-          '--cpu', '8'
+          '--cpu', str(self.n_cpu)
       ]
       # If adding flags, we have to do so before the output and input:
       if self.flags:
