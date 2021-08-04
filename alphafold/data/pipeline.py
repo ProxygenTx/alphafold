@@ -23,6 +23,7 @@ from alphafold.data import templates
 from alphafold.data.tools import hhblits
 from alphafold.data.tools import hhsearch
 from alphafold.data.tools import jackhmmer
+from alphafold.data.tools.utils import file_exists_and_nonempty
 import numpy as np
 
 # Internal import (7716).
@@ -137,7 +138,7 @@ class DataPipeline:
         mgnify_out_path = os.path.join(msa_output_dir, 'mgnify_hits.sto')
         pdb70_out_path = os.path.join(msa_output_dir, 'pdb70_hits.hhr')
 
-        if os.path.exists(uniref90_out_path):
+        if file_exists_and_nonempty(uniref90_out_path):
             logging.info("Found Jackhmmer UniRef90 results - Reusing.")
             with open(uniref90_out_path, "r") as f:
                 jackhmmer_uniref90_result = {"sto": f.read()}
@@ -151,7 +152,7 @@ class DataPipeline:
         uniref90_msa, uniref90_deletion_matrix, _ = parsers.parse_stockholm(
             jackhmmer_uniref90_result['sto'])
 
-        if os.path.exists(pdb70_out_path):
+        if file_exists_and_nonempty(pdb70_out_path):
             logging.info("Found hhsearch pdb70 results - Reusing.")
             with open(pdb70_out_path, "r") as f:
                 hhsearch_result = f.read()
@@ -161,7 +162,7 @@ class DataPipeline:
                 f.write(hhsearch_result)
         hhsearch_hits = parsers.parse_hhr(hhsearch_result)
 
-        if os.path.exists(mgnify_out_path):
+        if file_exists_and_nonempty(mgnify_out_path):
             logging.info("Found Jackhmmer mgnify results - Reusing.")
             with open(mgnify_out_path, "r") as f:
                 jackhmmer_mgnify_result = {"sto": f.read()}
@@ -177,7 +178,7 @@ class DataPipeline:
 
         if self._use_small_bfd:
             bfd_out_path = os.path.join(msa_output_dir, 'small_bfd_hits.a3m')
-            if os.path.exists(bfd_out_path):
+            if file_exists_and_nonempty(bfd_out_path):
                 logging.info("Found Jackhmmer small BFD results - Reusing.")
                 with open(bfd_out_path, "r") as f:
                     jackhmmer_small_bfd_result = {"sto": f.read()}
@@ -190,7 +191,7 @@ class DataPipeline:
                 jackhmmer_small_bfd_result['sto'])
         else:
             bfd_out_path = os.path.join(msa_output_dir, 'bfd_uniclust_hits.a3m')
-            if os.path.exists(bfd_out_path):
+            if file_exists_and_nonempty(bfd_out_path):
                 logging.info("Found Jackhmmer full BFD results - Reusing.")
                 with open(bfd_out_path, "r") as f:
                     hhblits_bfd_uniclust_result = {"a3m": f.read()}

@@ -75,7 +75,7 @@ class HHSearch:
 
       logging.info('Launching subprocess "%s"', ' '.join(cmd))
       process = subprocess.Popen(
-          cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
       with utils.timing('HHsearch query'):
         stdout, stderr = process.communicate()
         retcode = process.wait()
@@ -83,8 +83,8 @@ class HHSearch:
       if retcode:
         # Stderr is truncated to prevent proto size errors in Beam.
         raise RuntimeError(
-            'HHSearch failed:\nstdout:\n%s\n\nstderr:\n%s\n' % (
-                stdout.decode('utf-8'), stderr[:100_000].decode('utf-8')))
+          'HHSearch failed:\nstdout:\n%s\n\nstderr:\n%s\n' % (
+            stdout.decode('utf-8'), stderr[:100_000].decode('utf-8')))
 
       with open(hhr_path) as f:
         hhr = f.read()
